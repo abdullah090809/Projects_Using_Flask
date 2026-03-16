@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block style %}
+<style>
+    .hero {
+        text-align: center;
+        padding: 5rem 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .hero p {
+        font-size: 16px;
+        color: #64748b;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #1a1a2e;
+        color: white;
+        text-decoration: none;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .btn:hover {
+        background: #2d2d4e;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="hero">
+        <h1>Welcome to my Feedback Website</h1>
+        <p>We'd love to hear what you think. Share your thoughts with us!</p>
+        <a href="/feedback" class="btn">Give Feedback</a>
+    </div>
+{% endblock %}
