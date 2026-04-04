@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}AniScan — Results{% endblock %}
+
+{% block content %}
+<section class="results-page">
+
+    <div class="results-header">
+        <a href="/" class="back-btn">← New Scan</a>
+        <div class="results-stats">
+            <span class="stat"><span class="stat-num">{{ results|length }}</span> New</span>
+            <span class="stat-sep">/</span>
+            <span class="stat"><span class="stat-num">{{ matched|length }}</span> On List</span>
+            <span class="stat-sep">/</span>
+            <span class="stat"><span class="stat-num">{{ discarded|length }}</span> Discarded</span>
+        </div>
+        <a href="/download_results" class="download-btn">↓ Download Results</a>
+    </div>
+
+    <!-- NEW ANIME -->
+    {% if results %}
+    <div class="section">
+        <div class="section-label">
+            <span class="section-tag new-tag">NEW</span>
+            <h2 class="section-title">Not on Your Watchlist</h2>
+        </div>
+        <div class="anime-grid">
+            {% for entry in results %}
+            <div class="anime-card new-card">
+                <div class="anime-card-header">
+                    <div class="anime-titles">
+                        <h3 class="anime-en">{{ entry.anime.title_english or "Unknown" }}</h3>
+                        <p class="anime-jp">{{ entry.anime.title_japanese or "" }}</p>
+                    </div>
+                    <div class="anime-score">{{ entry.anime.score or "N/A" }}</div>
+                </div>
+                {% if entry.anime.genres %}
+                <div class="anime-genres">
+                    {% for genre in entry.anime.genres %}
+                    <span class="genre-tag">{{ genre }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="anime-status new-status">✦ Not in watchlist</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- MATCHED -->
+    {% if matched %}
+    <div class="section">
+        <div class="section-label">
+            <span class="section-tag matched-tag">WATCHED</span>
+            <h2 class="section-title">Already on Your List</h2>
+        </div>
+        <div class="anime-grid">
+            {% for entry in matched %}
+            <div class="anime-card matched-card">
+                <div class="anime-card-header">
+                    <div class="anime-titles">
+                        <h3 class="anime-en">{{ entry.anime.title_english or "Unknown" }}</h3>
+                        <p class="anime-jp">{{ entry.anime.title_japanese or "" }}</p>
+                    </div>
+                    <div class="anime-score">{{ entry.anime.score or "N/A" }}</div>
+                </div>
+                {% if entry.anime.genres %}
+                <div class="anime-genres">
+                    {% for genre in entry.anime.genres %}
+                    <span class="genre-tag">{{ genre }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="anime-status matched-status">✔ Your rating: {{ entry.match.watchlist_rating }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- DISCARDED -->
+    {% if discarded %}
+    <div class="section">
+        <div class="section-label">
+            <span class="section-tag discard-tag">DISCARDED</span>
+            <h2 class="section-title">Unidentified Text</h2>
+        </div>
+        <div class="discard-grid">
+            {% for chunk in discarded %}
+            <div class="discard-item">
+                <span class="discard-text">{{ chunk }}</span>
+                <form action="/search_discarded" method="POST" class="discard-form">
+                    <input type="hidden" name="query" value="{{ chunk }}">
+                    <button type="submit" class="discard-search-btn">Search →</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not results and not matched and not discarded %}
+    <div class="empty-state">
+        <p>No anime identified from the screenshots.</p>
+        <a href="/" class="scan-btn">Try Again</a>
+    </div>
+    {% endif %}
+
+</section>
+{% endblock %}
